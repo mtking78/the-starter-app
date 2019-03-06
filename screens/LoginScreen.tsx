@@ -3,12 +3,15 @@ import {
   Image,
   KeyboardAvoidingView,
   StyleSheet,
-  View } from "react-native";
+  View,
+  StatusBar
+} from "react-native";
 import Button from "../components/Button";
 import FormTextInput from "../components/FormTextInput";
 import imageLogo from "../assets/images/logo.png";
 import colors from "../config/colors";
 import strings from "../config/strings";
+import constants from "../config/constants";
 
 interface State {
   email: string;
@@ -82,6 +85,10 @@ class LoginScreen extends React.Component<{}, State> {
         style={styles.container}
         behavior="padding"
       >
+        <StatusBar
+          barStyle="dark-content"
+          backgroundColor="#FFFFFF"
+        />
         <Image source={imageLogo} style={styles.logo} />
         <View style={styles.form}>
           <FormTextInput
@@ -94,6 +101,8 @@ class LoginScreen extends React.Component<{}, State> {
             returnKeyType="next"
             onBlur={this.handleEmailBlur}
             error={emailError}
+            // `blurOnSubmit` causes a keyboard glitch on Android when we want to manually focus the next input.
+            blurOnSubmit={constants.IS_IOS}
           />
           <FormTextInput
             ref={this.passwordInputRef}
