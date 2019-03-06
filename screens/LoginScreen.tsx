@@ -1,15 +1,51 @@
 import * as React from "react";
-import {
-  StyleSheet,
-  Text,
-  View
-} from "react-native";
+import { Image, StyleSheet, View } from "react-native";
+import Button from "../components/Button";
+import FormTextInput from "../components/FormTextInput";
+import imageLogo from "../assets/images/logo.png";
+import colors from "../config/colors";
+import strings from "../config/strings";
 
-class LoginScreen extends React.Component<{}> {
+interface State {
+  email: string;
+  password: string;
+}
+
+class LoginScreen extends React.Component<{}, State> {
+  readonly state: State = {
+    email: "",
+    password: ""
+  };
+
+  handleEmailChange = (email: string) => {
+    this.setState({ email: email });
+  };
+
+  handlePasswordChange = (password: string) => {
+    this.setState({ password: password });
+  };
+
+  handleLoginPress = () => {
+    console.log("Login button pressed");
+  };
+
   render() {
     return (
       <View style={styles.container}>
-        <Text>Welcome to the login screen!</Text>
+        <Image source={imageLogo} style={styles.logo} />
+        <View style={styles.form}>
+          <FormTextInput
+            value={this.state.email}
+            onChangeText={this.handleEmailChange}
+            placeholder={strings.EMAIL_PLACEHOLDER}
+          />
+          <FormTextInput
+            value={this.state.password}
+            onChangeText={this.handlePasswordChange}
+            placeholder={strings.PASSWORD_PLACEHOLDER}
+          />
+          <Button label={strings.LOGIN} onPress={this.handleLoginPress} />
+        </View>
       </View>
     );
   }
@@ -18,9 +54,20 @@ class LoginScreen extends React.Component<{}> {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#fff",
+    backgroundColor: colors.WHITE,
     alignItems: "center",
-    justifyContent: "center"
+    justifyContent: "space-between"
+  },
+  logo: {
+    flex: 1,
+    width: "100%",
+    resizeMode: "contain",
+    alignSelf: "center"
+  },
+  form: {
+    flex: 1,
+    justifyContent: "center",
+    width: "80%"
   }
 });
 
