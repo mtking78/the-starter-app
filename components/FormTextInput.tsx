@@ -10,11 +10,23 @@ import colors from "../config/colors";
 type Props = TextInputProps;
 
 class FormTextInput extends React.Component<Props> {
+
+  // Create a React ref that will be used to store the TextInput reference
+  textInputRef = React.createRef<TextInput>();
+
+  // Expose a `focus` method that will allow us to focus the TextInput
+  focus = () => {
+    if (this.textInputRef.current) {
+      this.textInputRef.current.focus();
+    }
+  };
+
   render() {
     // We define our own custom style for the TextInput, but still want to allow the developer to also supply its own additional style if needed.  To do so, we extract the "style" prop from all the other props to prevent it to ovveride our own custom style.
     const { style, ...otherProps } = this.props;
     return (
       <TextInput
+        ref={this.textInputRef}
         selectionColor={colors.DODGER_BLUE}
         // Add the externally specified style to our own custom style.
         style={[styles.textInput, style]}

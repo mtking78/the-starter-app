@@ -1,5 +1,9 @@
 import * as React from "react";
-import { Image, StyleSheet, View } from "react-native";
+import {
+  Image,
+  KeyboardAvoidingView,
+  StyleSheet,
+  View } from "react-native";
 import Button from "../components/Button";
 import FormTextInput from "../components/FormTextInput";
 import imageLogo from "../assets/images/logo.png";
@@ -12,6 +16,10 @@ interface State {
 }
 
 class LoginScreen extends React.Component<{}, State> {
+
+  // Create a React ref for storing the FormTextInput reference
+  passwordInputRef = React.createRef<FormTextInput>();
+
   readonly state: State = {
     email: "",
     password: ""
@@ -25,28 +33,45 @@ class LoginScreen extends React.Component<{}, State> {
     this.setState({ password: password });
   };
 
+  // When the "next" button is pressed, focus switches to the password input.
+  handleEmailSubmitPress = () => {
+    if (this.passwordInputRef.current) {
+      this.passwordInputRef.current.focus();
+    }
+  };
+
   handleLoginPress = () => {
     console.log("Login button pressed");
   };
 
   render() {
     return (
-      <View style={styles.container}>
+      <KeyboardAvoidingView
+        style={styles.container}
+        behavior="padding"
+      >
         <Image source={imageLogo} style={styles.logo} />
         <View style={styles.form}>
           <FormTextInput
+            placeholder={strings.EMAIL_PLACEHOLDER}
             value={this.state.email}
             onChangeText={this.handleEmailChange}
-            placeholder={strings.EMAIL_PLACEHOLDER}
+            onSubmitEditing={this.handleEmailSubmitPress}
+            autoCorrect={false}
+            keyboardType="email-address"
+            returnKeyType="next"
           />
           <FormTextInput
+            ref={this.passwordInputRef}
+            placeholder={strings.PASSWORD_PLACEHOLDER}
             value={this.state.password}
             onChangeText={this.handlePasswordChange}
-            placeholder={strings.PASSWORD_PLACEHOLDER}
+            secureTextEntry={true}
+            returnKeyType="done"
           />
           <Button label={strings.LOGIN} onPress={this.handleLoginPress} />
         </View>
-      </View>
+      </KeyboardAvoidingView>
     );
   }
 }
