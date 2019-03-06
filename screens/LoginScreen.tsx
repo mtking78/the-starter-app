@@ -13,6 +13,9 @@ import strings from "../config/strings";
 interface State {
   email: string;
   password: string;
+  // Add a field to track if user has already touched the input
+  emailTouched: boolean;
+  passwordTouched: boolean;
 }
 
 class LoginScreen extends React.Component<{}, State> {
@@ -22,7 +25,9 @@ class LoginScreen extends React.Component<{}, State> {
 
   readonly state: State = {
     email: "",
-    password: ""
+    password: "",
+    emailTouched: false,
+    passwordTouched: false
   };
 
   handleEmailChange = (email: string) => {
@@ -40,11 +45,38 @@ class LoginScreen extends React.Component<{}, State> {
     }
   };
 
+  // ...update them in the input onBlur callback
+  handleEmailBlur = () => {
+    this.setState({ emailTouched: true });
+  };
+
+  handlePasswordBlur = () => {
+    this.setState({ passwordTouched: true });
+  };
+
   handleLoginPress = () => {
     console.log("Login button pressed");
   };
 
   render() {
+
+    const {
+      email,
+      password,
+      emailTouched,
+      passwordTouched
+    } = this.state;
+
+    // Show the validation errors only when the inputs are empty AND have been blurred at least once.
+    const emailError =
+      !email && emailTouched
+        ? strings.EMAIL_REQUIRED
+        : undefined;
+    const passwordError =
+      !password && passwordTouched
+        ? strings.PASSWORD_REQUIRED
+        : undefined;
+
     return (
       <KeyboardAvoidingView
         style={styles.container}
@@ -60,6 +92,8 @@ class LoginScreen extends React.Component<{}, State> {
             autoCorrect={false}
             keyboardType="email-address"
             returnKeyType="next"
+            onBlur={this.handleEmailBlur}
+            error={emailError}
           />
           <FormTextInput
             ref={this.passwordInputRef}
@@ -68,8 +102,14 @@ class LoginScreen extends React.Component<{}, State> {
             onChangeText={this.handlePasswordChange}
             secureTextEntry={true}
             returnKeyType="done"
+            onBlur={this.handlePasswordBlur}
+            error={passwordError}
           />
-          <Button label={strings.LOGIN} onPress={this.handleLoginPress} />
+          <Button
+            label={strings.LOGIN}
+            onPress={this.handleLoginPress}
+            disabled={!email || !password}
+          />
         </View>
       </KeyboardAvoidingView>
     );
