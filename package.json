@@ -8,7 +8,22 @@
     "test": "node ./node_modules/jest/bin/jest.js --watchAll"
   },
   "jest": {
-    "preset": "jest-expo"
+    "preset": "react-native",
+    "moduleFileExtensions": [
+      "ts",
+      "tsx",
+      "js"
+    ],
+    "transform": {
+      "^.+\\.(js)$": "<rootDir>/node_modules/babel-jest",
+      "\\.(ts|tsx)$": "<rootDir>/node_modules/ts-jest/preprocessor.js"
+    },
+    "testRegex": "(/__tests__/.*|\\.(test|spec))\\.(ts|tsx|js)$",
+    "testPathIgnorePatterns": [
+      "\\.snap$",
+      "<rootDir>/node_modules/"
+    ],
+    "cacheDirectory": ".jest/cache"
   },
   "dependencies": {
     "@expo/samples": "2.1.1",
@@ -18,8 +33,16 @@
     "react-navigation": "^3.0.9"
   },
   "devDependencies": {
+    "@types/jest": "^24.0.9",
+    "@types/react": "^16.8.6",
+    "@types/react-native": "^0.57.38",
+    "@types/react-test-renderer": "^16.8.1",
     "babel-preset-expo": "^5.0.0",
-    "jest-expo": "^32.0.0"
+    "jest-expo": "^32.0.0",
+    "react-addons-test-utils": "^15.6.2",
+    "react-native-typescript-transformer": "^1.2.12",
+    "ts-jest": "^24.0.0",
+    "typescript": "^3.3.3333"
   },
   "private": true
 }
